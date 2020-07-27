@@ -91,7 +91,7 @@ class Connection : public Nan::ObjectWrap {
   static NAN_METHOD(NodeQueryWatermarkOffsets);
   static NAN_METHOD(NodeOffsetsForTimes);
   static NAN_METHOD(NodeOauthBearerSetCode);
-  static NAN_METHOD(NodeOauthBearerSetFailure);
+  static NAN_METHOD(NodeOauthBearerSetCodeFailure);
 };
 
 }  // namespace NodeKafka

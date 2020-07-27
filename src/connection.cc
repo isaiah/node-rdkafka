@@ -314,9 +314,22 @@ NAN_METHOD(Connection::NodeOauthBearerSetCode) {
 
   std::string errstr;
   RdKafka::ErrorCode err = obj->m_client->oauthbearer_set_token(tokenValue, expiration, principal, extensionsList, errstr);
-  if (err != Rdkafka::ERR_NO_ERROR) {
+  if (err != RdKafka::ERR_NO_ERROR) {
     return Nan::ThrowError(errstr.c_str());
   }
+
+  info.GetReturnValue().Set(Nan::Null());
+}
+
+NAN_METHOD(Connection::NodeOauthBearerSetCodeFailure) {
+  Nan::HandleScope scope;
+  Connection* obj = ObjectWrap::Unwrap<Connection>(info.This());
+
+  Nan::Utf8String strUTF8(Nan::To<v8::String>(info[0]).ToLocalChecked());
+  // The first parameter is the topic
+  std::string err_str(*strUTF8);
+
+  obj->m_client->oauthbearer_set_token_failure(err_str.c_str());
 
   info.GetReturnValue().Set(Nan::Null());
 }
