@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 
 #include "rdkafkacpp.h"
 #include "rdkafka.h"  // NOLINT
@@ -37,6 +38,7 @@ template<> std::vector<std::string> GetParameter<std::vector<std::string> >(
 // template int GetParameter<int>(v8::Local<v8::Object, std::string, int);
 std::vector<std::string> v8ArrayToStringVector(v8::Local<v8::Array>);
 
+std::list<std::string> v8ObjectToStringList(v8::Local<v8::Object>);
 class scoped_mutex_lock {
  public:
   explicit scoped_mutex_lock(uv_mutex_t& lock_) :  // NOLINT

@@ -291,6 +291,36 @@ NAN_METHOD(Connection::NodeOffsetsForTimes) {
   info.GetReturnValue().Set(Nan::Null());
 }
 
+NAN_METHOD(Connection::NodeOauthBearerSetCode) {
+  Nan::HandleScope scope;
+  Connection* obj = ObjectWrap::Unwrap<Connection>(info.This());
+
+  v8::Local<v8::Object> oauthBearerToken;
+  if (info[0]->IsObject()) {
+    oauthBearerToken = info[0].As<v8::Object>();
+  } else {
+    oauthBearerToken = Nan::New<v8::Object>();
+  }
+
+  std::string tokenValue = GetParameter<std::string>(oauthBearerToken, "tokenValue", "");
+  std::string principal = GetParameter<std::string>(oauthBearerToken, "principal", "");
+  int64_t expiration = GetParameter<int64_t>(oauthBearerToken, "expiration", 0);
+  v8::MaybeLocal<v8::Value> extensions = Nan::Get(oauthBearerToken, Nan::New<v8::String>("extensions").ToLocalChecked());
+  if (extensions.IsEmpty()) {
+    Nan::ThrowTypeError("requires extensions parameter");
+  }
+
+  std::list<std::string> extensionsList = v8ObjectToStringList(extensions.ToLocalChecked().As<v8::Object>());
+
+  std::string errstr;
+  RdKafka::ErrorCode err = obj->m_client->oauthbearer_set_token(tokenValue, expiration, principal, extensionsList, errstr);
+  if (err != Rdkafka::ERR_NO_ERROR) {
+    return Nan::ThrowError(errstr.c_str());
+  }
+
+  info.GetReturnValue().Set(Nan::Null());
+}
+
 NAN_METHOD(Connection::NodeQueryWatermarkOffsets) {
   Nan::HandleScope scope;
 

@@ -121,6 +121,35 @@ std::vector<std::string> GetParameter<std::vector<std::string> >(
   return def;
 }
 
+std::list<std::string> v8ObjectToStringList(v8::Local<v8::Object> parameter) {
+  std::list<std::string> newItem;
+
+  v8::Local<v8::Array> keys = Nan::GetPropertyNames(parameter).ToLocalChecked();
+  if (keys->Length() >= 1) {
+    for (unsigned int i = 0; i < keys->Length(); i++) {
+      v8::Local<v8::Value> k;
+      if (!Nan::Get(keys, i).ToLocal(&k)) {
+        continue;
+      }
+
+      Nan::MaybeLocal<v8::String> p = Nan::To<v8::String>(k);
+      if (p.IsEmpty()) {
+        continue;
+      }
+      Nan::Utf8String pVal(p.ToLocalChecked());
+      std::string pString(*pVal);
+      newItem.push_back(pString);
+
+      v8::Local<v8::String> v = Nan::Get(parameter, k).ToLocalChecked().As<v8::String>();
+
+      Nan::Utf8String pV(v);
+      std::string vstr(*pV);
+      newItem.push_back(vstr);
+    }
+  }
+  return newItem;
+}
+
 std::vector<std::string> v8ArrayToStringVector(v8::Local<v8::Array> parameter) {
   std::vector<std::string> newItem;
 
