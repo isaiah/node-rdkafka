@@ -40,6 +40,13 @@ export interface BrokerMetadata {
     port: number;
 }
 
+export interface OauthBearerToken {
+  tokenValue: string;
+  expiration: number;
+  principal: string;
+  extensions: any;
+}
+
 export interface PartitionMetadata {
     id: number;
     leader: number;

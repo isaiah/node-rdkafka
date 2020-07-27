@@ -283,6 +283,11 @@ export interface GlobalConfig {
     "connect_cb"?: any;
 
     /**
+     * Oauth Bearer Token refresh callback
+     */
+    "oauthbearer_token_refresh_cb"?: any;
+
+    /**
      * Socket close callback
      */
     "closesocket_cb"?: any;
